@@ -1,7 +1,7 @@
 #cd "../";;
 
 #use "chapter2.ml";;
-#use "lexicon/en.ml";;
+#use "lexicons/en.ml";;
 
 (*********)
 (* Tests *)
