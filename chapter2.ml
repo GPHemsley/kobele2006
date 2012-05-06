@@ -12,7 +12,7 @@ type feature =
     | Licensor of string    (* +x *)
 ;;
 
-type morpheme = M of string | Trace;;
+type morpheme = M of string;;
 type subtree = { spec: morpheme list; head: morpheme list; comp: morpheme list; features: feature list };;
 
 module Derivation =
