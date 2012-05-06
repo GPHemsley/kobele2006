@@ -68,6 +68,10 @@ let lex_en =
 
         make_lexeme "everyone" [ Categorial("d"); Licensee("k"); Licensee("q") ];
         make_lexeme "something" [ Categorial("d"); Licensee("k"); Licensee("q") ];
+
+        make_lexeme "" [ Selection("s"); Categorial("t") ];
+
+        make_lexeme "rain" [ Categorial("v") ];
     ]
 ;;
 
