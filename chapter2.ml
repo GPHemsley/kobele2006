@@ -70,7 +70,7 @@ let merge_selection ( stree : subtree * subtree list ) ( ctree : subtree * subtr
         | _::_  ->print_endline "licensing features";
             (
                 (Derivation.make_subtree st_merge.spec st_merge.head st_merge.comp st_f),
-                ct_move @ [ (Derivation.make_subtree ct_merge.spec ct_merge.head ct_merge.comp ct_f) ]
+                st_move @ [ (Derivation.make_subtree ct_merge.spec ct_merge.head ct_merge.comp ct_f) ]
             )
 ;;
 
@@ -109,7 +109,7 @@ let merge_lowering stree ctree =
     in
     let ctree =
         (
-            (Derivation.make_subtree ct_merge.spec ( st_merge.head @ ct_merge.head ) ct_merge.comp ct_merge.features),
+            (Derivation.make_subtree ct_merge.spec ( ct_merge.head @ st_merge.head ) ct_merge.comp ct_merge.features),
             (List.rev (List.rev_map (function x -> Derivation.make_subtree x.spec x.head x.comp x.features) ct_move))
         )
     in
@@ -148,7 +148,7 @@ let check_licensee licensor licensee =
           []    ->print_endline "no more licensing features";
             (
                 (Derivation.make_subtree ( ee1.spec @ ee1.head @ ee1.comp ) licensor.head licensor.comp f_or),
-                []
+                (List.tl licensee)
             )
         | _::_  ->print_endline "more licensing features";
             (
@@ -250,7 +250,7 @@ let lex_en =
 
         make_lexeme "a" [ Selection("n"); Categorial'("d"); Licensee("k"); Licensee("q") ];
 
-        make_lexeme "'s" [ Selection("d"); Licensor("k"); Licensor("q"); Selection("n"); Categorial'("d"); Licensee("k"); Licensee("q") ];
+        make_lexeme "'s" [ Selection("n"); Selection("d"); Licensor("k"); Licensor("q"); Categorial'("d"); Licensee("k"); Licensee("q") ];
 
         make_lexeme "everyone" [ Categorial("d"); Licensee("k"); Licensee("q") ];
         make_lexeme "something" [ Categorial("d"); Licensee("k"); Licensee("q") ];
@@ -268,57 +268,63 @@ let en_get_entries_for = get_entries_for lex_en;;
 (* Lexicon *)
 (*---------*)
 
-let _the_ = List.hd (en_get_entries_for "the");;
-let _ointment_ = List.hd (en_get_entries_for "ointment");;
-let _'s_ = List.hd (en_get_entries_for "'s");;
 let _John_ = List.hd (en_get_entries_for "John");;
+
+let _everyone_ = List.hd (en_get_entries_for "everyone");;
+let _something_ = List.hd (en_get_entries_for "something");;
+
+let _the_ = List.hd (en_get_entries_for "the");;
+let _'s_ = List.hd (en_get_entries_for "'s");;
+
+let _ointment_ = List.hd (en_get_entries_for "ointment");;
+
 let _devour_ = List.hd (en_get_entries_for "devour");;
+let _arrive_ = List.hd (en_get_entries_for "arrive");;
+
 let _will_ = List.hd (en_get_entries_for "will");;
 let __ed_ = List.hd (en_get_entries_for "-ed");;
 let __ing_ = List.hd (en_get_entries_for "-ing");;
-let _everyone_ = List.hd (en_get_entries_for "everyone");;
-let _something_ = List.hd (en_get_entries_for "something");;
 
 let __act__ = List.nth (en_get_entries_for "") 0;;
 let __perf__ = List.nth (en_get_entries_for "") 1;;
 let __prog__ = List.nth (en_get_entries_for "") 2;;
 
+let _promise_ = List.nth (en_get_entries_for "promise") 1;;
+
 (*-------------*)
 (* Derivations *)
 (*-------------*)
 
+(* Page 20 *)
+(* the ointment *)
 let _the_ointment_ = merge _the_ _ointment_;;
 
+(* Page 21 *)
+(* John's ointment *)
 let _John's_ointment_ =
-    let d1 = merge _'s_ _John_ in
-    let d2 = move d1 in
+    let d1 = merge _'s_ _ointment_ in
+    let d2 = merge _John_ d1 in
     let d3 = move d2 in
-    let d4 = merge _ointment_ d3 in
+    let d4 = move d3 in
     d4
 ;;
 
-let _devour_the_ointment_ = merge _devour_ _the_ointment_;;
-(*
-let _will_devour_the_ointment_ = merge _will_ _devour_;;
-*)
-
-(*
-let __ing_devour_the_ointment_ = merge __ing_ _devour_the_ointment_;;
-*)
-
-let __act__devour_the_ointment_ = merge __act__ _devour_the_ointment_;;
-let _the_ointment__act__devour_ = move __act__devour_the_ointment_;;
-(*
-merge _John_ _the_ointment__act__devour_;;
-*)
-
-let _arrive_ = List.hd (en_get_entries_for "arrive");;
-
-let _promise_ = List.nth (en_get_entries_for "promise") 1;;
-
-let _arrive_the_ointment_ = merge _arrive_ _the_ointment_;;
-let _promise_the_ointment_ = merge _promise_ _the_ointment_;;
-let _the_ointment_promise_ = move _promise_the_ointment_;;
+(* Page 57 *)
+(* John devoured the ointment. *)
+let _John_devoured_the_ointment_ =
+    let d1 = merge _the_ _ointment_ in
+    let d2 = merge _devour_ d1 in
+    let d3 = merge __act__ d2 in
+    let d4 = move d3 in
+    let d5 = merge _John_ d4 in
+    let d6 = move d5 in
+    let d7 = merge __prog__ d6 in
+    let d8 = merge __perf__ d7 in
+    let d9 = merge __ed_ d8 in
+    let d10 = move d9 in
+    let d11 = move d10 in
+    d11
+;;
 
 (* Page 80 *)
 (* (2.50) Something devoured everyone. *)
