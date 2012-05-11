@@ -18,6 +18,7 @@ let _Mary_ = List.hd (en_get_entries_for "Mary");;
 let _everyone_ = List.hd (en_get_entries_for "everyone");;
 let _something_ = List.hd (en_get_entries_for "something");;
 
+let _a_ = List.hd (en_get_entries_for "a");;
 let _the_ = List.hd (en_get_entries_for "the");;
 let _'s_ = List.hd (en_get_entries_for "'s");;
 let _some_ = List.hd (en_get_entries_for "some");;
@@ -31,6 +32,7 @@ let _shave_ = List.hd (en_get_entries_for "shave");;
 let _arrive_ = List.hd (en_get_entries_for "arrive");;
 let _die_ = List.hd (en_get_entries_for "die");;
 let _expect_ = List.hd (en_get_entries_for "expect");;
+let _want_ = List.hd (en_get_entries_for "want");;
 
 let _seem_ = List.hd (en_get_entries_for "seem");;
 
@@ -636,19 +638,64 @@ let _something_seems_to_be_devouring_everyone_ =
 
 (* Page 85 *)
 (* (2.52) Everyone was devoured. *)
-(*** TO DO ***)
+let _everyone_was_devoured_ =
+    let d1 = merge _devour_ _everyone_ in
+    let d2 = merge __en__PASS__ d1 in
+    let d3 = merge _be__PASS__ d2 in
+    let d4 = merge __PROG__ d3 in
+    let d5 = merge __PERF__ d4 in
+    let d6 = merge __ed_ d5 in
+    let d7 = move d6 in
+    let d8 = move d7 in
+    d8
+;;
 
 (* Page 85 *)
 (* (2.53) Something devoured everyone. *)
-(*** TO DO ***)
+(*** SEE PAGE 80 ABOVE ***)
 
 (* Page 85 *)
 (* (2.54) Everyone is expected to devour John. *)
-(*** TO DO ***)
+let _everyone_is_expected_to_devour_John_ =
+    let d1 = merge _devour_ _John_ in
+    let d2 = merge __ACT__ d1 in
+    let d3 = move d2 in
+    let d4 = merge _everyone_ d3 in
+    let d5 = move d4 in
+    let d6 = merge __PROG__ d5 in
+    let d7 = merge __PERF__ d6 in
+    let d8 = merge _to__INF__ d7 in
+    let d9 = merge _expect_ d8 in
+    let d10 = merge __en__PASS__ d9 in
+    let d11 = merge _be__PASS__ d10 in
+    let d12 = merge __PROG__ d11 in
+    let d13 = merge __PERF__ d12 in
+    let d14 = merge __s_ d13 in
+    let d15 = move d14 in
+    let d16 = move d15 in
+    d16
+;;
 
 (* Page 86 *)
 (* (2.55) John seemed to shave an abbot. *)
-(*** TO DO ***)
+let _John_seemed_to_shave_an_abbot_ =
+    let d1 = merge _a_ _abbot_ in
+    let d2 = merge _shave_ d1 in
+    let d3 = merge __ACT__ d2 in
+    let d4 = move d3 in
+    let d5 = merge _John_ d4 in
+    let d6 = move d5 in
+    let d7 = merge __PROG__ d6 in
+    let d8 = merge __PERF__ d7 in
+    let d9 = merge _to__INF__ d8 in
+    let d10 = merge _seem_ d9 in
+    let d11 = merge __PROG__ d10 in
+    let d12 = merge __PERF__ d11 in
+    let d13 = merge __ed_ d12 in
+    let d14 = move d13 in
+    let d15 = move d14 in
+    d15
+;;
 
 (* Page 86 *)
 (* (2.56) John wanted to shave an abbot. *)
