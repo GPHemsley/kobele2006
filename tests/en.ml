@@ -20,11 +20,16 @@ let _something_ = List.hd (en_get_entries_for "something");;
 
 let _the_ = List.hd (en_get_entries_for "the");;
 let _'s_ = List.hd (en_get_entries_for "'s");;
+let _some_ = List.hd (en_get_entries_for "some");;
+let _every_ = List.hd (en_get_entries_for "every");;
 
 let _ointment_ = List.hd (en_get_entries_for "ointment");;
+let _abbot_ = List.hd (en_get_entries_for "abbot");;
 
 let _devour_ = List.hd (en_get_entries_for "devour");;
+let _shave_ = List.hd (en_get_entries_for "shave");;
 let _arrive_ = List.hd (en_get_entries_for "arrive");;
+let _die_ = List.hd (en_get_entries_for "die");;
 let _expect_ = List.hd (en_get_entries_for "expect");;
 
 let _seem_ = List.hd (en_get_entries_for "seem");;
@@ -530,9 +535,67 @@ let _John_devoured_the_ointment_ =
     d11
 ;;
 
+(* Page 64 *)
+(* (2.43) Exactly more than one maggot will devour more than two carcasses. *)
+(*** TO DO ***)
 
+(* Page 64 *)
+(* (2.44) John will too. *)
+(*** TO DO ***)
 
+(* Page 74 *)
+(* (2.45) Some abbot died. *)
+let _some_abbot_died_ =
+    let d1 = merge _some_ _abbot_ in
+    let d2 = merge _die_ d1 in
+    let d3 = merge __PROG__ d2 in
+    let d4 = merge __PERF__ d3 in
+    let d5 = merge __ed_ d4 in
+    let d6 = move d5 in
+    let d7 = move d6 in
+    d7
+;;
 
+(* Page 75 *)
+(* (2.46) George shaved some abbot. *)
+let _George_shaved_some_abbot_ =
+    let d1 = merge _some_ _abbot_ in
+    let d2 = merge _shave_ d1 in
+    let d3 = merge __ACT__ d2 in
+    let d4 = move d3 in
+    let d5 = merge _George_ d4 in
+    let d6 = move d5 in
+    let d7 = merge __PROG__ d6 in
+    let d8 = merge __PERF__ d7 in
+    let d9 = merge __ed_ d8 in
+    let d10 = move d9 in
+    let d11 = move d10 in
+    d11
+;;
+
+(* Page 78 *)
+(* (2.47) *John thinks some abbot (that) George shaved. *)
+(*** UNGRAMMATICAL ***)
+
+(* Page 78 *)
+(* (2.48) John devoured George. *)
+let _John_devoured_George_ =
+    let d1 = merge _devour_ _George_ in
+    let d2 = merge __ACT__ d1 in
+    let d3 = move d2 in
+    let d4 = merge _John_ d3 in
+    let d5 = move d4 in
+    let d6 = merge __PROG__ d5 in
+    let d7 = merge __PERF__ d6 in
+    let d8 = merge __ed_ d7 in
+    let d9 = move d8 in
+    let d10 = move d9 in
+    d10
+;;
+
+(* Page 79 *)
+(* (2.49) *George John devoured. *)
+(*** UNGRAMMATICAL ***)
 
 (* Page 80 *)
 (* (2.50) Something devoured everyone. *)
@@ -570,3 +633,139 @@ let _something_seems_to_be_devouring_everyone_ =
     let d15 = move d14 in
     d15
 ;;
+
+(* Page 85 *)
+(* (2.52) Everyone was devoured. *)
+(*** TO DO ***)
+
+(* Page 85 *)
+(* (2.53) Something devoured everyone. *)
+(*** TO DO ***)
+
+(* Page 85 *)
+(* (2.54) Everyone is expected to devour John. *)
+(*** TO DO ***)
+
+(* Page 86 *)
+(* (2.55) John seemed to shave an abbot. *)
+(*** TO DO ***)
+
+(* Page 86 *)
+(* (2.56) John wanted to shave an abbot. *)
+(*** TO DO ***)
+
+(* Page 86 *)
+(* (2.57) George expected John to shave an abbot. *)
+(*** TO DO ***)
+
+(* Page 86 *)
+(* (2.58) George persuaded John to shave an abbot. *)
+(*** TO DO ***)
+
+
+
+
+
+(* Page 86 *)
+(* (2.63) It seemed to be raining. *)
+(*** TO DO ***)
+
+(* Page 86 *)
+(* (2.64) *It wanted to be raining. *)
+(*** UNGRAMMATICAL ***)
+
+(* Page 86 *)
+(* (2.65) George expected it to be raining. *)
+(*** TO DO ***)
+
+(* Page 86 *)
+(* (2.66) *George persuaded it to be raining. *)
+(*** UNGRAMMATICAL ***)
+
+(* Page 88 *)
+(* (2.67) George persuaded John to want to shave an abbot. *)
+(*** TO DO ***)
+
+(* Page 89 *)
+(* (2.68) Every barber promised George to be persuaded to shave an abbot. *)
+(*** TO DO ***)
+
+(* Page 96 *)
+(* (2.69) George promised John to arrive on time. *)
+(*** TO DO ***)
+
+(* Page 96 *)
+(* (2.70) *John was promised to arrive on time. *)
+(*** UNGRAMMATICAL ***)
+
+(* Page 96 *)
+(* (2.71) Mary promised John that George would arrive on time. *)
+(*** TO DO ***)
+
+(* Page 96 *)
+(* (2.72) John was promised that George would arrive on time. *)
+(*** TO DO ***)
+
+(* Page 99 *)
+(* (2.73) Every barber wanted to arrive. *)
+(*** TO DO ***)
+
+(* Page 99 *)
+(* (2.74) *Every barber wanted (that) George will be promised to arrive. *)
+(*** UNGRAMMATICAL ***)
+
+(* Page 100 *)
+(* (2.75) to arrive every barber *)
+(*** TO DO ***)
+
+(* Page 100 *)
+(* (2.76) promise some abbot *)
+(*** TO DO ***)
+
+(* Page 101 *)
+(* (2.77) *Some abbot promised every barber to arrive. *)
+(*** UNGRAMMATICAL ***)
+
+(* Page 101 *)
+(* (2.78) Some abbot promised himself that every barber would arrive. *)
+(*** TO DO ***)
+
+(* Page 105 *)
+(* (2.79) John promised George to shave an abbot. *)
+(*** TO DO ***)
+
+(* Page 105 *)
+(* (2.80) *George was promised to shave an abbot. *)
+(*** UNGRAMMATICAL ***)
+
+(* Page 105 *)
+(* (2.81) John persuaded George to shave an abbot. *)
+(*** TO DO ***)
+
+(* Page 105 *)
+(* (2.82) John was persuaded to shave an abbot. *)
+(*** TO DO ***)
+
+(* Page 105 *)
+(* (2.83) John promised George that every barber had shaved an abbot. *)
+(*** TO DO ***)
+
+(* Page 106 *)
+(* (2.84) George was promised that every barber had shaved an abbot. *)
+(*** TO DO ***)
+
+(* Page 106 *)
+(* (2.85) George hoped to shave an abbot. *)
+(*** TO DO ***)
+
+(* Page 106 *)
+(* (2.86) *George was hoped to shave an abbot. *)
+(*** UNGRAMMATICAL ***)
+
+(* Page 106 *)
+(* (2.87) George hoped that every barber had shaved an abbot. *)
+(*** TO DO ***)
+
+(* Page 106 *)
+(* (2.88) It was hoped that every barber had shaved an abbot. *)
+(*** TO DO ***)

@@ -72,6 +72,8 @@ let lex_en =
         make_lexeme "" [ Selection("s"); Categorial("t") ];
 
         make_lexeme "rain" [ Categorial("v") ];
+
+        make_lexeme "die" [ Selection("d"); Categorial("v") ];
     ]
 ;;
 
