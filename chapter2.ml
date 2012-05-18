@@ -46,88 +46,66 @@ let rec add_lexemes lexicon entries =
 
 exception InvalidDerivation of string;;
 
-(* val merge_selection : subtree * subtree list -> subtree * subtree list -> subtree * subtree list = <fun> *)
-let merge_selection ( stree : subtree * subtree list ) ( ctree : subtree * subtree list ) =
-    let st_merge = fst stree in
-    let ct_merge = fst ctree in
-    let st_move = snd stree in
-    let ct_move = snd ctree in
+(* val replace_head : subtree -> morpheme list -> subtree = <fun> *)
+let replace_head subtree head =
+    Derivation.make_subtree subtree.spec head subtree.comp subtree.features
+;;
+
+(* val replace_features : subtree -> feature list -> subtree = <fun> *)
+let replace_features subtree features =
+    Derivation.make_subtree subtree.spec subtree.head subtree.comp features
+;;
+
+(* val merge_selection : subtree -> subtree list -> subtree -> subtree list -> subtree * subtree list = <fun> *)
+let merge_selection st_merge st_move ct_merge ct_move =
     let st_f = List.tl (st_merge.features) in
     let ct_f = List.tl (ct_merge.features) in
     match ct_f with
-          []    ->(*print_endline "no more features";*)
+          []    ->
             (
                 (Derivation.make_subtree [] st_merge.head ( ct_merge.spec @ ct_merge.head @ ct_merge.comp ) st_f),
                 ct_move
             )
-        | _::_  ->(*print_endline "licensing features";*)
+        | _::_  ->
             (
-                (Derivation.make_subtree st_merge.spec st_merge.head st_merge.comp st_f),
-                st_move @ [ (Derivation.make_subtree ct_merge.spec ct_merge.head ct_merge.comp ct_f) ]
+                (replace_features st_merge st_f),
+                st_move @ [ (replace_features ct_merge ct_f) ]
             )
 ;;
 
-(* val merge_raising : subtree * subtree list -> subtree * subtree list -> subtree * subtree list = <fun> *)
-let merge_raising stree ctree =
-    let st_merge = fst stree in
-    let ct_merge = fst ctree in
-    let st_move = snd stree in
-    let ct_move = snd ctree in
-    let stree =
-        (
-            (Derivation.make_subtree st_merge.spec ( ct_merge.head @ st_merge.head ) st_merge.comp st_merge.features),
-            (List.rev (List.rev_map (function x -> Derivation.make_subtree x.spec x.head x.comp x.features) st_move))
-        )
-    in
-    let ctree =
-        (
-            (Derivation.make_subtree ct_merge.spec [] ct_merge.comp ct_merge.features),
-            (List.rev (List.rev_map (function x -> Derivation.make_subtree x.spec x.head x.comp x.features) ct_move))
-        )
-    in
-    merge_selection stree ctree
+(* val merge_raising : subtree -> subtree list -> subtree -> subtree list -> subtree * subtree list = <fun> *)
+let merge_raising st_merge st_move ct_merge ct_move =
+    merge_selection (replace_head st_merge ( ct_merge.head @ st_merge.head )) st_move (replace_head ct_merge []) ct_move
 ;;
 
-(* val merge_lowering : subtree * subtree list -> subtree * subtree list -> subtree * subtree list = <fun> *)
-let merge_lowering stree ctree =
-    let st_merge = fst stree in
-    let ct_merge = fst ctree in
-    let st_move = snd stree in
-    let ct_move = snd ctree in
-    let stree =
-        (
-            (Derivation.make_subtree st_merge.spec [] st_merge.comp st_merge.features),
-            (List.rev (List.rev_map (function x -> Derivation.make_subtree x.spec x.head x.comp x.features) st_move))
-        )
-    in
-    let ctree =
-        (
-            (Derivation.make_subtree ct_merge.spec ( ct_merge.head @ st_merge.head ) ct_merge.comp ct_merge.features),
-            (List.rev (List.rev_map (function x -> Derivation.make_subtree x.spec x.head x.comp x.features) ct_move))
-        )
-    in
-    merge_selection stree ctree
+(* val merge_lowering : subtree -> subtree list -> subtree -> subtree list -> subtree * subtree list = <fun> *)
+let merge_lowering st_merge st_move ct_merge ct_move =
+    merge_selection (replace_head st_merge []) st_move (replace_head ct_merge ( ct_merge.head @ st_merge.head )) ct_move
 ;;
 
-(* val merge_test : subtree * subtree -> subtree * subtree -> subtree * subtree = <fun> *)
+(* val merge : subtree * subtree -> subtree * subtree -> subtree * subtree = <fun> *)
 let merge tree1 tree2 =
-    let f1 = List.hd (fst tree1).features in
-    let f2 = List.hd (fst tree2).features in
+    let t1_merge = fst tree1 in
+    let t2_merge = fst tree2 in
+    let t1_move = snd tree1 in
+    let t2_move = snd tree2 in
+    let f1 = List.hd t1_merge.features in
+    let f2 = List.hd t2_merge.features in
     match ( f1, f2 ) with
-          ( Selection(s), Categorial(c) ) when s = c    ->  merge_selection tree1 tree2
-        | ( Categorial(c), Selection(s) ) when s = c    ->  merge_selection tree2 tree1
-        | ( Raising(r), Categorial(c) ) when r = c      ->  merge_raising tree1 tree2
-        | ( Categorial(c), Raising(r) ) when r = c      ->  merge_raising tree2 tree1
-        | ( Lowering(l), Categorial(c) ) when l = c     ->  merge_lowering tree1 tree2
-        | ( Categorial(c), Lowering(l) ) when l = c     ->  merge_lowering tree2 tree1
+          ( Selection(s), Categorial(c) )
+        | ( Selection(s), Categorial'(c) ) when s = c   ->  merge_selection t1_merge t1_move t2_merge t2_move
+        | ( Categorial(c), Selection(s) )
+        | ( Categorial'(c), Selection(s) ) when s = c   ->  merge_selection t2_merge t2_move t1_merge t1_move
 
-        (* These might need special handling at some point. *)
-        | ( Selection(s), Categorial'(c) ) when s = c   ->  merge_selection tree1 tree2
-        | ( Categorial'(c), Selection(s) ) when s = c   ->  merge_selection tree2 tree1
-        | ( Raising(r), Categorial'(c) ) when r = c     ->  merge_raising tree1 tree2
-        | ( Categorial'(c), Raising(r) ) when r = c     ->  merge_raising tree2 tree1
-        | ( Lowering(l), Categorial'(c) ) when l = c    ->  merge_lowering tree1 tree2
-        | ( Categorial'(c), Lowering(l) ) when l = c    ->  merge_lowering tree2 tree1
+        | ( Raising(r), Categorial(c) )
+        | ( Raising(r), Categorial'(c) ) when r = c     ->  merge_raising t1_merge t1_move t2_merge t2_move
+        | ( Categorial(c), Raising(r) )
+        | ( Categorial'(c), Raising(r) ) when r = c     ->  merge_raising t2_merge t2_move t1_merge t1_move
+
+        | ( Lowering(l), Categorial(c) )
+        | ( Lowering(l), Categorial'(c) ) when l = c    ->  merge_lowering t1_merge t1_move t2_merge t2_move
+        | ( Categorial(c), Lowering(l) )
+        | ( Categorial'(c), Lowering(l) ) when l = c    ->  merge_lowering t2_merge t2_move t1_merge t1_move
 
         | _                                             ->  raise (InvalidDerivation "merge")
 ;;
