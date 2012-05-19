@@ -56,35 +56,60 @@ let replace_features subtree features =
     Derivation.make_subtree subtree.spec subtree.head subtree.comp features
 ;;
 
-(* val merge_selection : subtree -> subtree list -> subtree -> subtree list -> subtree * subtree list = <fun> *)
-let merge_selection st_merge st_move ct_merge ct_move =
-    let st_f = List.tl (st_merge.features) in
-    let ct_f = List.tl (ct_merge.features) in
-    match ct_f with
-          []    ->
-            (
-                (Derivation.make_subtree [] st_merge.head ( ct_merge.spec @ ct_merge.head @ ct_merge.comp ) st_f),
-                ct_move
-            )
-        | _::_  ->
-            (
-                (replace_features st_merge st_f),
-                st_move @ [ (replace_features ct_merge ct_f) ]
-            )
+(* val get_first_feature : subtree -> feature = <fun> *)
+let rec get_first_feature subexp =
+    List.hd subexp.features
 ;;
 
-(* val merge_raising : subtree -> subtree list -> subtree -> subtree list -> subtree * subtree list = <fun> *)
-let merge_raising st_merge st_move ct_merge ct_move =
-    merge_selection (replace_head st_merge ( ct_merge.head @ st_merge.head )) st_move (replace_head ct_merge []) ct_move
+(* val get_first_licensee : subtree -> feature = <fun> *)
+let rec get_first_licensee subexp =
+    try
+        List.find (function | Licensee(_) -> true | _ -> false) subexp.features
+    with
+        Not_found -> raise (InvalidDerivation "get_first_licensee")
 ;;
 
-(* val merge_lowering : subtree -> subtree list -> subtree -> subtree list -> subtree * subtree list = <fun> *)
-let merge_lowering st_merge st_move ct_merge ct_move =
-    merge_selection (replace_head st_merge []) st_move (replace_head ct_merge ( ct_merge.head @ st_merge.head )) ct_move
+(* val get_first_features : subtree list -> feature list = <fun> *)
+let rec get_first_features subexps =
+    match subexps with
+          []    ->  []
+        | h::t  ->  (get_first_feature h)::(get_first_features t)
+;;
+
+(* val get_first_licensees : subtree list -> feature list = <fun> *)
+let rec get_first_licensees subexps =
+    match subexps with
+          []    ->  []
+        | h::t  ->  (get_first_licensee h)::(get_first_licensees t)
 ;;
 
 (* val merge : subtree * subtree -> subtree * subtree -> subtree * subtree = <fun> *)
 let merge tree1 tree2 =
+    let merge_selection st_merge st_move ct_merge ct_move =
+        let st_f = List.tl (st_merge.features) in
+        let ct_f = List.tl (ct_merge.features) in
+        match ct_f with
+              []    ->
+                (
+                    (Derivation.make_subtree [] st_merge.head ( ct_merge.spec @ ct_merge.head @ ct_merge.comp ) st_f),
+                    st_move @ ct_move
+                )
+            | _::_  ->
+                let ct_move_new = replace_features ct_merge ct_f in
+                if ( List.mem (get_first_feature ct_move_new) (get_first_features st_move) ) || ( List.mem (get_first_licensee ct_move_new) (get_first_licensees st_move) )
+                then raise (InvalidDerivation "IMM")
+                else
+                    (
+                        (replace_features st_merge st_f),
+                        st_move @ ct_move @ [ ct_move_new ]
+                    )
+    in
+    let merge_raising st_merge st_move ct_merge ct_move =
+        merge_selection (replace_head st_merge ( ct_merge.head @ st_merge.head )) st_move (replace_head ct_merge []) ct_move
+    in
+    let merge_lowering st_merge st_move ct_merge ct_move =
+        merge_selection (replace_head st_merge []) st_move (replace_head ct_merge ( ct_merge.head @ st_merge.head )) ct_move
+    in
     let t1_merge = fst tree1 in
     let t2_merge = fst tree2 in
     let t1_move = snd tree1 in
@@ -110,21 +135,105 @@ let merge tree1 tree2 =
         | _                                             ->  raise (InvalidDerivation "merge")
 ;;
 
-(* val check_licensee : subtree -> subtree list -> subtree * subtree list = <fun> *)
-let check_licensee licensor licensee =
-    let ee1 = List.hd licensee in
-    let f_or = List.tl licensor.features in
-    let f_ee = List.tl ee1.features in
+(* XXX: There's gotta be a way to combine this with merge to reduce code duplication! *)
+(* val cmerge : subtree * subtree list -> subtree * subtree list -> subtree * subtree list = <fun> *)
+let cmerge tree1 tree2 =
+    let cmerge_selection st_merge st_move ct_merge ct_move =
+        let st_f = List.tl (st_merge.features) in
+        let ct_f = ct_merge.features in
+        match ct_f with
+              []    ->
+                (
+                    (Derivation.make_subtree [] st_merge.head ( ct_merge.spec @ ct_merge.head @ ct_merge.comp ) st_f),
+                    st_move @ ct_move
+                )
+            | _::_  ->
+                let ct_move_new = replace_features ct_merge ct_f in
+                if ( List.mem (get_first_feature ct_move_new) (get_first_features st_move) ) || ( List.mem (get_first_licensee ct_move_new) (get_first_licensees st_move) )
+                then raise (InvalidDerivation "IMM")
+                else
+                    (
+                        (replace_features st_merge st_f),
+                        st_move @ ct_move @ [ ct_move_new ]
+                    )
+    in
+    let cmerge_raising st_merge st_move ct_merge ct_move =
+        cmerge_selection (replace_head st_merge ( ct_merge.head @ st_merge.head )) st_move (replace_head ct_merge []) ct_move
+    in
+    let cmerge_lowering st_merge st_move ct_merge ct_move =
+        cmerge_selection (replace_head st_merge []) st_move (replace_head ct_merge ( ct_merge.head @ st_merge.head )) ct_move
+    in
+    let t1_merge = fst tree1 in
+    let t2_merge = fst tree2 in
+    let t1_move = snd tree1 in
+    let t2_move = snd tree2 in
+    let f1 = List.hd t1_merge.features in
+    let f2 = List.hd t2_merge.features in
+    match ( f1, f2 ) with
+        | ( Selection(s), Categorial'(c) ) when s = c   ->  cmerge_selection t1_merge t1_move t2_merge t2_move
+        | ( Categorial'(c), Selection(s) ) when s = c   ->  cmerge_selection t2_merge t2_move t1_merge t1_move
+
+        | ( Raising(r), Categorial'(c) ) when r = c     ->  cmerge_raising t1_merge t1_move t2_merge t2_move
+        | ( Categorial'(c), Raising(r) ) when r = c     ->  cmerge_raising t2_merge t2_move t1_merge t1_move
+
+        | ( Lowering(l), Categorial'(c) ) when l = c    ->  cmerge_lowering t1_merge t1_move t2_merge t2_move
+        | ( Categorial'(c), Lowering(l) ) when l = c    ->  cmerge_lowering t2_merge t2_move t1_merge t1_move
+
+        | _                                             ->  raise (InvalidDerivation "merge")
+;;
+
+(* val get_movable_subexp : subtree -> subtree list -> subtree = <fun> *)
+let get_movable_subexp t_merge t_move =
+    let f_merge = List.hd t_merge.features in
+    let match_feature f =
+        match ( f_merge, (get_first_feature f) ) with
+              ( Licensor(o), Licensee(e) )
+            | ( Raising(o), Categorial'(e) )
+            | ( Lowering(o), Categorial'(e) )
+            | ( Selection(o), Categorial'(e) ) when e = o -> true
+            | _ -> false
+    in
+    try
+        List.find match_feature t_move
+    with
+        Not_found -> raise (InvalidDerivation "get_movable_subexp")
+;;
+
+(* val symmetric_check : subtree -> subtree list -> subtree * subtree list = <fun> *)
+let symmetric_check checkor checkee =
+    let ee_h = get_movable_subexp checkor checkee in
+    let ee_t = List.filter ((!=) ee_h) checkee in
+    let f_or = List.tl checkor.features in
+    let f_ee = List.tl ee_h.features in
     match f_ee with
           []    ->(*print_endline "no more licensing features";*)
             (
-                (Derivation.make_subtree ( ee1.spec @ ee1.head @ ee1.comp ) licensor.head licensor.comp f_or),
-                (List.tl licensee)
+                (Derivation.make_subtree ( ee_h.spec @ ee_h.head @ ee_h.comp ) checkor.head checkor.comp f_or),
+                ee_t
             )
         | _::_  ->(*print_endline "more licensing features";*)
             (
-                (Derivation.make_subtree licensor.spec licensor.head licensor.comp f_or),
-                (Derivation.make_subtree ee1.spec ee1.head ee1.comp f_ee)::(List.tl licensee)
+                (Derivation.make_subtree checkor.spec checkor.head checkor.comp f_or),
+                (Derivation.make_subtree ee_h.spec ee_h.head ee_h.comp f_ee)::ee_t (* XXX: This changes the order of the list. Does that matter? *)
+            )
+;;
+
+(* val asymmetric_check : subtree -> subtree list -> subtree * subtree list = <fun> *)
+let asymmetric_check checkor checkee =
+    let ee_h = get_movable_subexp checkor checkee in
+    let ee_t = List.filter ((!=) ee_h) checkee in
+    let f_or = List.tl checkor.features in
+    let f_ee = ee_h.features in
+    match f_ee with
+          []    ->(*print_endline "no more licensing features";*)
+            (
+                (Derivation.make_subtree ( ee_h.spec @ ee_h.head @ ee_h.comp ) checkor.head checkor.comp f_or),
+                ee_t
+            )
+        | _::_  ->(*print_endline "more licensing features";*)
+            (
+                (Derivation.make_subtree checkor.spec checkor.head checkor.comp f_or),
+                (Derivation.make_subtree ee_h.spec ee_h.head ee_h.comp f_ee)::ee_t (* XXX: This changes the order of the list. Does that matter? *)
             )
 ;;
 
@@ -133,10 +242,36 @@ let move tree =
     let t_merge = fst tree in
     let t_move = snd tree in
     let f_merge = List.hd t_merge.features in
-    let f_move = List.hd (List.hd t_move).features in
+    let f_move = List.hd (get_movable_subexp t_merge t_move).features in
     match ( f_merge, f_move ) with
-          ( Licensor( o ), Licensee( e ) ) when e = o   ->  check_licensee t_merge t_move
+          ( Licensor( o ), Licensee( e ) ) when e = o   ->  symmetric_check t_merge t_move
         | _                                             ->  raise (InvalidDerivation "move")
+;;
+
+(* val cmove1 : subtree * subtree list -> subtree * subtree list = <fun> *)
+let cmove1 tree =
+    let t_merge = fst tree in
+    let t_move = snd tree in
+    let f_merge = List.hd t_merge.features in
+    let f_move = List.hd (get_movable_subexp t_merge t_move).features in
+    match ( f_merge, f_move ) with
+          ( Raising( s ), Categorial'( c ) )
+        | ( Lowering( s ), Categorial'( c ) )
+        | ( Selection( s ), Categorial'( c ) ) when c = s   ->  symmetric_check t_merge t_move
+        | _                                                 ->  raise (InvalidDerivation "cmove1")
+;;
+
+(* val cmove2 : subtree * subtree list -> subtree * subtree list = <fun> *)
+let cmove2 tree =
+    let t_merge = fst tree in
+    let t_move = snd tree in
+    let f_merge = List.hd t_merge.features in
+    let f_move = List.hd (get_movable_subexp t_merge t_move).features in
+    match ( f_merge, f_move ) with
+          ( Raising( s ), Categorial'( c ) )
+        | ( Lowering( s ), Categorial'( c ) )
+        | ( Selection( s ), Categorial'( c ) ) when c = s   ->  asymmetric_check t_merge t_move
+        | _                                                 ->  raise (InvalidDerivation "cmove2")
 ;;
 
 (* val get_entries_that_match : Lexicon.t -> (Lexicon.elt -> bool) -> Lexicon.elt list = <fun> *)
