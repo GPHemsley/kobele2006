@@ -39,7 +39,7 @@ let lex_en =
 
         make_lexeme "persuade" [ Selection("t"); Selection("d"); Categorial("V") ];
 
-        make_lexeme "promise" [ Selection("d"); Selection("s"); Categorial("V") ];
+        make_lexeme "promise" [ Selection("d"); Selection("t"); Categorial("V") ];
 
         make_lexeme "promise" [ Selection("d"); Licensor("k"); Selection("t"); Selection("d"); Licensor("q"); Categorial("v") ];
 
