@@ -781,7 +781,21 @@ let _George_persuaded_John_to_shave_an_abbot_ =
 
 (* Page 86 *)
 (* (2.63) It seemed to be raining. *)
-(*** TO DO ***)
+let _it_seemed_to_be_raining_ =
+    let d1 = merge __ing_ _rain_ in
+    let d2 = merge _be__PROG__ d1 in
+    let d3 = merge __PERF__ d2 in
+    let d4 = merge _to__INF__ d3 in
+    let d5 = merge _seem_ d4 in
+    let d6 = merge __EXPL__ d5 in
+    let d7 = merge _it__EXPL__ d6 in
+    let d8 = merge __PROG__ d7 in
+    let d9 = merge __PERF__ d8 in
+    let d10 = merge __ed_ d9 in
+    let d11 = move d10 in
+    let d12 = move d11 in
+    d12
+;;
 
 (* Page 86 *)
 (* (2.64) *It wanted to be raining. *)
@@ -789,7 +803,25 @@ let _George_persuaded_John_to_shave_an_abbot_ =
 
 (* Page 86 *)
 (* (2.65) George expected it to be raining. *)
-(*** TO DO ***)
+let _George_expected_it_to_be_raining_ =
+    let d1 = merge __EXPL__ _rain_ in
+    let d2 = merge _it__EXPL__ d1 in
+    let d3 = merge __ing_ d2 in
+    let d4 = merge _be__PROG__ d3 in
+    let d5 = merge __PERF__ d4 in
+    let d6 = merge _to__INF__ d5 in
+    let d7 = merge _expect_ d6 in
+    let d8 = merge __ACT__ d7 in
+    let d9 = move d8 in
+    let d10 = merge _George_ d9 in
+    let d11 = move d10 in
+    let d12 = merge __PROG__ d11 in
+    let d13 = merge __PERF__ d12 in
+    let d14 = merge __ed_ d13 in
+    let d15 = move d14 in
+    let d16 = move d15 in
+    d16
+;;
 
 (* Page 86 *)
 (* (2.66) *George persuaded it to be raining. *)
@@ -797,7 +829,34 @@ let _George_persuaded_John_to_shave_an_abbot_ =
 
 (* Page 88 *)
 (* (2.67) George persuaded John to want to shave an abbot. *)
-(*** TO DO ***)
+let _George_persuaded_John_to_want_to_shave_an_abbot_ =
+    let d1 = merge _a_ _abbot_ in
+    let d2 = merge _shave_ d1 in
+    let d3 = merge __ACT__ d2 in
+    let d4 = move d3 in
+    let d5 = cmerge _John_ d4 in
+    let d6 = move d5 in
+    let d7 = merge __PROG__ d6 in
+    let d8 = merge __PERF__ d7 in
+    let d9 = merge _to__INF__ d8 in
+    let d10 = merge _want_ d9 in
+    let d11 = cmove2 d10 in
+    let d12 = merge __PROG__ d11 in
+    let d13 = merge __PERF__ d12 in
+    let d14 = merge _to__INF__ d13 in
+    let d15 = merge _persuade_ d14 in
+    let d16 = cmove1 d15 in
+    let d17 = merge __ACT__ d16 in
+    let d18 = move d17 in
+    let d19 = merge _George_ d18 in
+    let d20 = move d19 in
+    let d21 = merge __PROG__ d20 in
+    let d22 = merge __PERF__ d21 in
+    let d23 = merge __ed_ d22 in
+    let d24 = move d23 in
+    let d25 = move d24 in
+    d25
+;;
 
 (* Page 89 *)
 (* (2.68) Every barber promised George to be persuaded to shave an abbot. *)
@@ -807,7 +866,7 @@ let _every_barber_promised_George_to_be_persuaded_to_shave_an_abbot_ =
     let d3 = merge __ACT__ d2 in
     let d4 = move d3 in
     let d5 = merge _every_ _barber_ in
-    let d6 = cmerge d4 d5 in
+    let d6 = cmerge d5 d4 in
     let d7 = move d6 in
     let d8 = merge __PROG__ d7 in
     let d9 = merge __PERF__ d8 in
@@ -850,7 +909,21 @@ let _every_barber_promised_George_to_be_persuaded_to_shave_an_abbot_ =
 
 (* Page 99 *)
 (* (2.73) Every barber wanted to arrive. *)
-(*** TO DO ***)
+let _every_barber_wanted_to_arrive_ =
+    let d1 = merge _every_ _barber_ in
+    let d2 = cmerge _arrive_ d1 in
+    let d3 = merge __PROG__ d2 in
+    let d4 = merge __PERF__ d3 in
+    let d5 = merge _to__INF__ d4 in
+    let d6 = merge _want_ d5 in
+    let d7 = cmove1 d6 in
+    let d8 = merge __PROG__ d7 in
+    let d9 = merge __PERF__ d8 in
+    let d10 = merge __ed_ d9 in
+    let d11 = move d10 in
+    let d12 = move d11 in
+    d12
+;;
 
 (* Page 99 *)
 (* (2.74) *Every barber wanted (that) George will be promised to arrive. *)
@@ -858,11 +931,37 @@ let _every_barber_promised_George_to_be_persuaded_to_shave_an_abbot_ =
 
 (* Page 100 *)
 (* (2.75) to arrive every barber *)
-(*** TO DO ***)
+let _to_arrive_every_barber__raising =
+    let d1 = merge _every_ _barber_ in
+    let d2 = merge _arrive_ d1 in
+    let d3 = merge __PROG__ d2 in
+    let d4 = merge __PERF__ d3 in
+    let d5 = merge _to__INF__ d4 in
+    d5
+;;
+
+let _to_arrive_every_barber__control =
+    let d1 = merge _every_ _barber_ in
+    let d2 = cmerge _arrive_ d1 in
+    let d3 = merge __PROG__ d2 in
+    let d4 = merge __PERF__ d3 in
+    let d5 = merge _to__INF__ d4 in
+    d5
+;;
 
 (* Page 100 *)
 (* (2.76) promise some abbot *)
-(*** TO DO ***)
+let _promise_some_abbot__merge =
+    let d1 = merge _some_ _abbot_ in
+    let d2 = merge _promise_ d1 in
+    d2
+;;
+
+let _promise_some_abbot__cmerge =
+    let d1 = merge _some_ _abbot_ in
+    let d2 = cmerge _promise_ d1 in
+    d2
+;;
 
 (* Page 101 *)
 (* (2.77) *Some abbot promised every barber to arrive. *)
@@ -881,7 +980,28 @@ d3;;
 
 (* Page 105 *)
 (* (2.79) John promised George to shave an abbot. *)
-(*** TO DO ***)
+let _John_promised_George_to_shave_an_abbot_ =
+    let d1 = merge _a_ _abbot_ in
+    let d2 = merge _shave_ d1 in
+    let d3 = merge __ACT__ d2 in
+    let d4 = move d3 in
+    let d5 = cmerge _John_ d4 in
+    let d6 = move d5 in
+    let d7 = merge __PROG__ d6 in
+    let d8 = merge __PERF__ d7 in
+    let d9 = merge _to__INF__ d8 in
+    let d10 = merge _promise_ _George_ in
+    let d11 = move d10 in
+    let d12 = merge d11 d9 in
+    let d13 = cmove1 d12 in
+    let d14 = move d13 in
+    let d15 = merge __PROG__ d14 in
+    let d16 = merge __PERF__ d15 in
+    let d17 = merge __ed_ d16 in
+    let d18 = move d17 in
+    let d19 = move d18 in
+    d19
+;;
 
 (* Page 105 *)
 (* (2.80) *George was promised to shave an abbot. *)
@@ -889,11 +1009,53 @@ d3;;
 
 (* Page 105 *)
 (* (2.81) John persuaded George to shave an abbot. *)
-(*** TO DO ***)
+let _John_persuaded_George_to_shave_an_abbot_ =
+    let d1 = merge _a_ _abbot_ in
+    let d2 = merge _shave_ d1 in
+    let d3 = merge __ACT__ d2 in
+    let d4 = move d3 in
+    let d5 = cmerge _George_ d4 in
+    let d6 = move d5 in
+    let d7 = merge __PROG__ d6 in
+    let d8 = merge __PERF__ d7 in
+    let d9 = merge _to__INF__ d8 in
+    let d10 = merge _persuade_ d9 in
+    let d11 = cmove1 d10 in
+    let d12 = merge __ACT__ d11 in
+    let d13 = move d12 in
+    let d14 = merge _John_ d13 in
+    let d15 = move d14 in
+    let d16 = merge __PROG__ d15 in
+    let d17 = merge __PERF__ d16 in
+    let d18 = merge __ed_ d17 in
+    let d19 = move d18 in
+    let d20 = move d19 in
+    d20
+;;
 
 (* Page 105 *)
-(* (2.82) John was persuaded to shave an abbot. *)
-(*** TO DO ***)
+(* (2.82) George was persuaded to shave an abbot. *)
+let _George_was_persuaded_to_shave_an_abbot_ =
+    let d1 = merge _a_ _abbot_ in
+    let d2 = merge _shave_ d1 in
+    let d3 = merge __ACT__ d2 in
+    let d4 = move d3 in
+    let d5 = cmerge _George_ d4 in
+    let d6 = move d5 in
+    let d7 = merge __PROG__ d6 in
+    let d8 = merge __PERF__ d7 in
+    let d9 = merge _to__INF__ d8 in
+    let d10 = merge _persuade_ d9 in
+    let d11 = cmove1 d10 in
+    let d12 = merge __en__PASS__ d11 in
+    let d13 = merge _be__PASS__ d12 in
+    let d14 = merge __PROG__ d13 in
+    let d15 = merge __PERF__ d14 in
+    let d16 = merge __ed_ d15 in
+    let d17 = move d16 in
+    let d18 = move d17 in
+    d18
+;;
 
 (* Page 105 *)
 (* (2.83) John promised George that every barber had shaved an abbot. *)
@@ -918,3 +1080,20 @@ d3;;
 (* Page 106 *)
 (* (2.88) It was hoped that every barber had shaved an abbot. *)
 (*** TO DO ***)
+
+(* Page 106 *)
+(* (fn35-1) It rained. *)
+let _it_rained_ =
+    let d1 = merge __EXPL__ _rain_ in
+    let d2 = merge _it__EXPL__ d1 in
+    let d3 = merge __PROG__ d2 in
+    let d4 = merge __PERF__ d3 in
+    let d5 = merge __ed_ d4 in
+    let d6 = move d5 in
+    let d7 = move d6 in
+    d7
+;;
+
+(* Page 106 *)
+(* (fn35-2) *To rain. *)
+(*** UNGRAMMATICAL ***)
