@@ -64,6 +64,8 @@ let _that__COMP__ = List.nth (en_get_entries_for "that") 0;; (* There could be a
 let __COMP__ = List.nth (en_get_entries_for "") 1;; (* Null 'that' *)
 let __HACK__ = List.nth (en_get_entries_for "") 0;; (* Hack to remove finiteness. *)
 
+let _eat__TR__ = List.nth (en_get_entries_for "eat") 0;;
+
 let _expect_ = List.nth (en_get_entries_for "expect") 0;;
 let _want_ = List.nth (en_get_entries_for "want") 1;;
 
@@ -97,7 +99,20 @@ let _promise__NFIN__ = List.nth (en_get_entries_for "promise") 1;;
 
 (* Page 19 *)
 (* (2.4) John will eat the ointment. *)
-(*** TO DO ***)
+let _John_will_eat_the_ointment_ =
+    let d1 = merge _the_ _ointment_ in
+    let d2 = merge _eat__TR__ d1 in
+    let d3 = merge __ACT__ d2 in
+    let d4 = move d3 in
+    let d5 = merge _John_ d4 in
+    let d6 = move d5 in
+    let d7 = merge __PROG__ d6 in
+    let d8 = merge __PERF__ d7 in
+    let d9 = merge _will_ d8 in
+    let d10 = move d9 in
+    let d11 = move d10 in
+    d11
+;;
 
 (* Page 20 *)
 (* the ointment *)
@@ -1125,7 +1140,25 @@ let _George_was_promised_that_every_barber_had_shaved_an_abbot_ =
 
 (* Page 106 *)
 (* (2.85) George hoped to shave an abbot. *)
-(*** TO DO ***)
+let _George_hoped_to_shave_an_abbot_ =
+    let d1 = merge _a_ _abbot_ in
+    let d2 = merge _shave_ d1 in
+    let d3 = merge __ACT__ d2 in
+    let d4 = move d3 in
+    let d5 = cmerge _George_ d4 in
+    let d6 = move d5 in
+    let d7 = merge __PROG__ d6 in
+    let d8 = merge __PERF__ d7 in
+    let d9 = merge _to__INF__ d8 in
+    let d10 = merge _hope__NFIN__ d9 in
+    let d11 = cmove1 d10 in
+    let d12 = merge __PROG__ d11 in
+    let d13 = merge __PERF__ d12 in
+    let d14 = merge __ed_ d13 in
+    let d15 = move d14 in
+    let d16 = move d15 in
+    d16
+;;
 
 (* Page 106 *)
 (* (2.86) *George was hoped to shave an abbot. *)
@@ -1133,11 +1166,61 @@ let _George_was_promised_that_every_barber_had_shaved_an_abbot_ =
 
 (* Page 106 *)
 (* (2.87) George hoped that every barber had shaved an abbot. *)
-(*** TO DO ***)
+let _George_hoped_that_every_barber_had_shaved_an_abbot_ =
+    let d1 = merge _a_ _abbot_ in
+    let d2 = merge _shave_ d1 in
+    let d3 = merge __ACT__ d2 in
+    let d4 = move d3 in
+    let d5 = merge _every_ _barber_ in
+    let d6 = merge d5 d4 in
+    let d7 = move d6 in
+    let d8 = merge __PROG__ d7 in
+    let d9 = merge __en__PERF__ d8 in
+    let d10 = merge _have__PERF__ d9 in
+    let d11 = merge __ed_ d10 in
+    let d12 = move d11 in
+    let d13 = move d12 in
+    let d14 = merge _that__COMP__ d13 in
+    let d15 = merge __HACK__ d14 in
+    let d16 = merge _hope__NFIN__ d15 in (* XXX: This is bad! *)
+    let d17 = merge _George_ d16 in
+    let d18 = merge __PROG__ d17 in
+    let d19 = merge __PERF__ d18 in
+    let d20 = merge __ed_ d19 in
+    let d21 = move d20 in
+    let d22 = move d21 in
+    d22
+;;
 
 (* Page 106 *)
 (* (2.88) It was hoped that every barber had shaved an abbot. *)
-(*** TO DO ***)
+let _it_was_hoped_that_every_barber_had_shaved_an_abbot_ =
+    let d1 = merge _a_ _abbot_ in
+    let d2 = merge _shave_ d1 in
+    let d3 = merge __ACT__ d2 in
+    let d4 = move d3 in
+    let d5 = merge _every_ _barber_ in
+    let d6 = merge d5 d4 in
+    let d7 = move d6 in
+    let d8 = merge __PROG__ d7 in
+    let d9 = merge __en__PERF__ d8 in
+    let d10 = merge _have__PERF__ d9 in
+    let d11 = merge __ed_ d10 in
+    let d12 = move d11 in
+    let d13 = move d12 in
+    let d14 = merge _that__COMP__ d13 in
+    let d15 = merge _hope__FIN__ d14 in
+    let d16 = merge __en__PASS__ d15 in
+    let d17 = merge _be__PASS__ d16 in
+    let d18 = merge __EXPL__ d17 in
+    let d19 = merge _it__EXPL__ d18 in
+    let d20 = merge __PROG__ d19 in
+    let d21 = merge __PERF__ d20 in
+    let d22 = merge __ed_ d21 in
+    let d23 = move d22 in
+    let d24 = move d23 in
+    d24
+;;
 
 (* Page 106 *)
 (* (fn35-1) It rained. *)

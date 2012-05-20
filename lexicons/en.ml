@@ -72,6 +72,8 @@ let lex_en =
         make_lexeme "" [ Selection("s"); Categorial("f") ]; (* covert 'that' *) (* p.c. *)
         make_lexeme "" [ Selection("f"); Categorial("t") ]; (* p.c. *)
 
+        make_lexeme "eat" [ Selection("d"); Categorial("V") ]; (* o.r. *)
+
         make_lexeme "rain" [ Categorial("v") ]; (* Page 43 *)
 
         make_lexeme "die" [ Selection("d"); Categorial("v") ]; (* Page 74 *)
